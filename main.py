@@ -42,7 +42,7 @@ x_train,y_train=train_x,train_y
 input_size  = 1  # 输入特征维度
 conv_input  = 12
 hidden_size = 64  # LSTM隐藏状态维度
-num_layers  = 5  # LSTM层数
+num_layers  = 6  # LSTM层数
 output_size = 1  # 输出维度（预测目标维度）
 
 ninp = 512
@@ -58,7 +58,7 @@ elif args.model == 'CNN_LSTM':
    model      =  model.CNN_LSTM(conv_input,input_size, hidden_size, num_layers, output_size)
    print("使用CNN_LSTM")
 elif args.model == 'Transformer':
-     model      =  model.TransformerModel( ninp,nlayers)
+     model      =  model.CNN_LSTM_Attention(conv_input,input_size, hidden_size, num_layers, output_size)
      print("使用Transformer")
 
 
@@ -66,7 +66,7 @@ elif args.model == 'Transformer':
 
 model      =  model.to(device)
 
-num_epochs = 20
+num_epochs = 1000
 batch_size = 16#一次训练的数量
 #优化器
 optimizer = optim.Adam(model.parameters(),lr=0.0001,betas=(0.5,0.999))
@@ -125,7 +125,7 @@ def train():
             optimizer.step()
 
         # 每 50 个 epoch 打印一次训练损失和测试损失
-        if epoch % 2 == 0:
+        if epoch % 50 == 0:
             model.eval()
             with torch.no_grad():
                 output    = model(test_x1)
